@@ -137,7 +137,7 @@
             $(document).ready(function() {
                 $('.js-example-basic-multiple').select2({
                     tags: true, //con esto doy permiso de colocarvalores que no esten en la base de datos
-                    tokenSeparators: [',',''],//es el separador para que ya no busque mas y agregue ducha palabra
+                    tokenSeparators: [',',' '],//es el separador para que ya no busque mas y agregue ducha palabra
                     ajax: {
                         url:"{{route('tags.select2')}}",
                         dataType:'json',

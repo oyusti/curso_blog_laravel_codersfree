@@ -95,7 +95,6 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        return $request->all();
         $request->validate([
             'title'         =>  'required|string|max:255', //solo se permite string maximo 255 caracteres
             'slug'          =>  'required|string|max:255|unique:posts,slug,' .$post->id,
