@@ -58,7 +58,7 @@
                 <select class="js-example-basic-multiple w-full" name="tags[]" multiple="multiple">
                  
                     @foreach ($post->tags as $tag)
-                        <option value="{{$tag->id}}" selected>{{$tag->name}}</option>
+                        <option value="{{$tag->name}}" selected>{{$tag->name}}</option>
                     @endforeach
                
                 </select>
@@ -136,6 +136,8 @@
             //Codigo para ejecutar select2
             $(document).ready(function() {
                 $('.js-example-basic-multiple').select2({
+                    tags: true, //con esto doy permiso de colocarvalores que no esten en la base de datos
+                    tokenSeparators: [',',''],//es el separador para que ya no busque mas y agregue ducha palabra
                     ajax: {
                         url:"{{route('tags.select2')}}",
                         dataType:'json',

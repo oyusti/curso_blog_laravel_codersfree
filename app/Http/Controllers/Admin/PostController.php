@@ -95,6 +95,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        return $request->all();
         $request->validate([
             'title'         =>  'required|string|max:255', //solo se permite string maximo 255 caracteres
             'slug'          =>  'required|string|max:255|unique:posts,slug,' .$post->id,
@@ -102,7 +103,17 @@ class PostController extends Controller
             'summary'       =>  'required|string',
             'content'       =>  'required|string',
         ]);
-        $post->tags()->sync($request->tags);
+
+        $tags=[];
+
+        foreach ($request->tags as $name) {
+            $tag = Tag::firstOrCreate(['name'=>$name]);
+            $tags[]=$tag->id;
+        }
+
+        
+
+        $post->tags()->sync($tags);
         $post->update($request->all());
 
         session()->flash('flash.banner', 'El Post se ha creado con exito');//se utiliza para dar mensajes flash, aqui especifico el nombre del mensaje
