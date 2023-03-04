@@ -101,11 +101,13 @@ class PostController extends Controller
             'category_id'   =>  'required|integer|exists:categories,id', //solo se permite entero y que exista la variable categories_id
             'summary'       =>  'required|string',
             'content'       =>  'required|string',
+            'is_published'  =>  'required|boolean'
         ]);
+
 
         $tags=[];
 
-        foreach ($request->tags as $name) {
+        foreach ($request->tags ?? [] as $name) {
             $tag = Tag::firstOrCreate(['name'=>$name]);
             $tags[]=$tag->id;
         }

@@ -16,4 +16,10 @@ class PostObserver
             $post->user_id = auth()->id();
         }
     }
+
+    public function updating(Post $post){
+        if ($post->is_published && is_null($post->published_at)){
+            $post->published_at = now();
+        }
+    }
 }
