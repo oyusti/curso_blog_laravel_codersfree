@@ -96,12 +96,24 @@
             <div class=" mb-4">
 
                 <div class=" flex justify-end">
+                    
+                    <x-jet-danger-button class=" mr-2" type="button" onclick="deletePost()">
+                        Eliminar Post
+                    </x-jet-danger-button>
+                    
                     <x-jet-button>
                         Actualizar Post
                     </x-jet-button>
+
+                    
                 </div>
-            </div>
+            </div
         </div>
+    </form>
+
+    <form action="{{route('admin.post.destroy', $post)}}" method="POST" id="FormDeletePost">
+        @csrf
+        @method('DElETE')
     </form>
 
     @push('js')
@@ -164,6 +176,11 @@
                     }
                 });
             });
+
+            function deletePost(){
+                form=document.getElementById("FormDeletePost");
+                form.submit();
+            }
         </script>
     @endpush
 

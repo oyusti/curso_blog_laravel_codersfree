@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
@@ -93,18 +94,9 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post)
     {
-        $request->validate([
-            'title'         =>  'required|string|max:255', //solo se permite string maximo 255 caracteres
-            'slug'          =>  'required|string|max:255|unique:posts,slug,' .$post->id,
-            'category_id'   =>  'required|integer|exists:categories,id', //solo se permite entero y que exista la variable categories_id
-            'summary'       =>  'required|string',
-            'content'       =>  'required|string',
-            'is_published'  =>  'required|boolean'
-        ]);
-
-
+        
         $tags=[];
 
         foreach ($request->tags ?? [] as $name) {
@@ -131,6 +123,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        session()->flash('flash.banner', 'El Post se ha eliminado con exito');
+        session()->flash('flash.bannerStyle', 'success');
+
+        return redirect()->route('admin.post.index');
     }
 }
