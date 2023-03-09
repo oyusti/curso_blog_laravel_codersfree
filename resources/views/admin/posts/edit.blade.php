@@ -5,9 +5,38 @@
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @endpush
 
-    <form action="{{ route('admin.post.update', $post) }}" method="Post">
+    <form action="{{ route('admin.post.update', $post) }}" method="Post" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+
+        <div class=" mb-6 relative"><!--Agregamos position relative a este div-->
+            
+            <figure>
+
+                <img class=" aspect-[16/9] object-cover object-center w-full" src="{{$post->image_url}}" id="imgPreview" alt="">
+            
+            </figure>
+        
+            <!--Usamos position absolute para moverlo contra la imagen-->
+            <div class=" absolute top-8 right-8" >
+                
+                <!--Creamos un label y es muy importante que este envuelta al input-->
+                <label class=" flex items-center px-4 py-2 bg-white rounded-lg cursor-pointer">
+                    
+                    <!--insertamos un icono de font-awesome-->
+                    <i class="fa-solid fa-camera mr-2"></i>
+
+                    Actualizar imagen
+                    <!--Creamos un input de tipo file y lo ocultamos-->
+                    <input type="file" accept="image/" name="" onchange="previewImage(event, '#imgPreview')" class=" hidden">
+                
+                </label>
+
+            </div>
+
+        </div>
+
+        
 
         <div class=" bg-white rounded-lg p-6 shadow-lg">
             <x-jet-validation-errors class=" mb-4" />
@@ -181,7 +210,33 @@
                 form=document.getElementById("FormDeletePost");
                 form.submit();
             }
+
+            //Script para previsualizar la imagen
+
+        function previewImage(event, querySelector){
+
+            //Recuperamos el input que desencadeno la acción
+            const input = event.target;
+            
+            //Recuperamos la etiqueta img donde cargaremos la imagen
+            $imgPreview = document.querySelector(querySelector);
+        
+            // Verificamos si existe una imagen seleccionada
+            if(!input.files.length) return
+            
+            //Recuperamos el archivo subido
+            file = input.files[0];
+        
+            //Creamos la url
+            objectURL = URL.createObjectURL(file);
+            
+            //Modificamos el atributo src de la etiqueta img
+            $imgPreview.src = objectURL;
+                        
+        }
         </script>
+
+        
     @endpush
 
 </x-admin-layout>
