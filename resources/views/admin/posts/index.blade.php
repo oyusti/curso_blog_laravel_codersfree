@@ -14,7 +14,7 @@
 
                 <figure>
                     <a href="{{ route('admin.post.show', $post) }}"><img
-                            class=" aspect-video object-cover object-center w-full" src="{{ $post->image }}"
+                            class=" aspect-video object-cover object-center w-full" src="{{ $post->image}}"
                             alt="{{ $post->title }}">
                     </a>
                 </figure>

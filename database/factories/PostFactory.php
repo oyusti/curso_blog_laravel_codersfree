@@ -25,7 +25,6 @@ class PostFactory extends Factory
             'slug'          =>  Str::slug($title),
             'summary'       =>  $this->faker->text(200),
             'content'       =>  $this->faker->paragraph(10, true),
-            'image_url'     =>  $this->faker->imageUrl(640, 480),
             'user_id'       =>  $this->faker->numberBetween(1,4)
         ];
     }

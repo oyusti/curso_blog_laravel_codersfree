@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 //use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -96,7 +97,6 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        
         $tags=[];
 
         foreach ($request->tags ?? [] as $name) {
@@ -109,7 +109,23 @@ class PostController extends Controller
         $post->tags()->sync($tags);
         $post->update($request->all());
 
-        session()->flash('flash.banner', 'El Post se ha creado con exito');//se utiliza para dar mensajes flash, aqui especifico el nombre del mensaje
+        //pregunto si en la informacion traida hay una imagen y si es asi la subo al almacenamiento
+        //el primer parametro representa la carpeta donde se guardara las imagenes que tendra la ruta public/storage/posts en este caso
+        //el segundo parametro representa el archivo que me traigo del formulario
+        if ($request->hasFile('image')){
+            //Pregunto si ya existe una imagen asociada al post y de ser asi la elimino
+            if($post->image_url){
+                Storage::delete($post->image_url);
+            }
+                $image_url=Storage::put('posts', $request->file('image'));
+                //Hasta ahora hemos subido la imagen a la carpeta pero no a la base de datos
+                $post->image_url=$image_url;
+                $post->save();
+            
+        }
+
+        //Codigo para crear el baner
+        session()->flash('flash.banner', 'El Post se ha actualizado con exito');//se utiliza para dar mensajes flash, aqui especifico el nombre del mensaje
         session()->flash('flash.bannerStyle', 'success');//Aqui especifico si 'success' o 'danger'. puedo dar estos dos mensajes
 
         return redirect()->route('admin.post.edit', $post);

@@ -9,11 +9,12 @@
         @csrf
         @method('PUT')
 
+
         <div class=" mb-6 relative"><!--Agregamos position relative a este div-->
             
             <figure>
 
-                <img class=" aspect-[16/9] object-cover object-center w-full" src="{{$post->image_url}}" id="imgPreview" alt="">
+                <img class=" aspect-[16/9] object-cover object-center w-full" src="{{$post->image}}" id="imgPreview" alt="">
             
             </figure>
         
@@ -28,7 +29,7 @@
 
                     Actualizar imagen
                     <!--Creamos un input de tipo file y lo ocultamos-->
-                    <input type="file" accept="image/" name="" onchange="previewImage(event, '#imgPreview')" class=" hidden">
+                    <input type="file" accept="image/" name="image" onchange="previewImage(event, '#imgPreview')" class=" hidden">
                 
                 </label>
 
@@ -36,7 +37,6 @@
 
         </div>
 
-        
 
         <div class=" bg-white rounded-lg p-6 shadow-lg">
             <x-jet-validation-errors class=" mb-4" />
