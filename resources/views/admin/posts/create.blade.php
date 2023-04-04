@@ -2,7 +2,7 @@
 
     <h1 class=" text-3xl font-semibold mb-2">Nuevo Articulo</h1>
 
-    <form action="{{ route('admin.post.store') }}" method="Post">
+    <form action="{{ route('admin.posts.store') }}" method="Post">
         @csrf
 
         <div class=" bg-white rounded-lg p-6 shadow-lg">

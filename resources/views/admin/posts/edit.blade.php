@@ -5,7 +5,7 @@
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @endpush
 
-    <form action="{{ route('admin.post.update', $post) }}" method="Post" enctype="multipart/form-data">
+    <form action="{{ route('admin.posts.update', $post) }}" method="Post" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -84,7 +84,7 @@
                     Etiquetas
                 </x-jet-label>
 
-                <select class="js-example-basic-multiple w-full" name="tags[]" multiple="multiple">
+                <select class="js-example-basic-multiple" name="tags[]" multiple="multiple" style="width:100%">
                  
                     @foreach ($post->tags as $tag)
                         <option value="{{$tag->name}}" selected>{{$tag->name}}</option>
@@ -140,7 +140,7 @@
         </div>
     </form>
 
-    <form action="{{route('admin.post.destroy', $post)}}" method="POST" id="FormDeletePost">
+    <form action="{{route('admin.posts.destroy', $post)}}" method="POST" id="FormDeletePost">
         @csrf
         @method('DElETE')
     </form>

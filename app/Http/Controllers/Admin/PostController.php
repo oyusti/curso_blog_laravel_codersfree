@@ -9,7 +9,7 @@ use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-//use Illuminate\Support\Str;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -62,7 +62,7 @@ class PostController extends Controller
         session()->flash('flash.banner', 'El Post se ha creado con exito');//se utiliza para dar mensajes flash, aqui especifico el nombre del mensaje
         session()->flash('flash.bannerStyle', 'success');//Aqui especifico si 'success' o 'danger'. puedo dar estos dos mensajes
 
-        return redirect()->route('admin.post.edit', $post);
+        return redirect()->route('admin.posts.edit', $post);
     }
 
     /**
@@ -117,10 +117,29 @@ class PostController extends Controller
             if($post->image_url){
                 Storage::delete($post->image_url);
             }
-                $image_url=Storage::put('posts', $request->file('image'));
-                //Hasta ahora hemos subido la imagen a la carpeta pero no a la base de datos
-                $post->image_url=$image_url;
-                $post->save();
+            
+            //Para darle nombre a las imagenes utilizamos el mismo nombre del slug y lo concatenamos con la extension de la imagen
+            $nameFile=Str::slug($request->slug) . '.' . $request->image->extension();
+            //Luego subimos la imagen con "PutFileAs" que admite 3 parametros, la ruta, la imagen y el nombre del archivo
+            $image_url=Storage::disk('s3')->putFileAs('posts', $request->image, $nameFile, 'public');
+
+            //Con esto subimos las imagenes pero no le cambiamos el nombre, para eso usamos "putFileAs"
+            //$image_url=Storage::put('posts', $request->file('image'));
+
+
+            //Otra forma de lograr esto es con request storeAs
+            //Creamos la variable del nombre
+            /* $nameFile=Str::slug($request->slug) . '.' . $request->image->extension();
+            //Subimos la imagen con cualquiera de las dos formas propuestas a continuacion
+            $image_url=$request->file('image')->storeAs('posts', $nameFile, [
+                'visibility'=>'public'
+            ]); */
+            //$image_url=$request->image->storeAs('posts', $nameFile);
+
+            
+            //Hasta ahora hemos subido la imagen a la carpeta pero no a la base de datos
+            $post->image_url=$image_url;
+            $post->save();
             
         }
 
@@ -128,7 +147,7 @@ class PostController extends Controller
         session()->flash('flash.banner', 'El Post se ha actualizado con exito');//se utiliza para dar mensajes flash, aqui especifico el nombre del mensaje
         session()->flash('flash.bannerStyle', 'success');//Aqui especifico si 'success' o 'danger'. puedo dar estos dos mensajes
 
-        return redirect()->route('admin.post.edit', $post);
+        return redirect()->route('admin.posts.edit', $post);
     }
 
     /**
@@ -143,6 +162,6 @@ class PostController extends Controller
         session()->flash('flash.banner', 'El Post se ha eliminado con exito');
         session()->flash('flash.bannerStyle', 'success');
 
-        return redirect()->route('admin.post.index');
+        return redirect()->route('admin.posts.index');
     }
 }

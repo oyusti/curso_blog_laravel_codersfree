@@ -36,10 +36,16 @@
                 'icon' => 'fa-solid fa-gauge-high',
             ],
             [
-                'title' => 'Post',
-                'url' => route('admin.post.index'),
-                'active' => request()->routeIs('admin.post.*'),
+                'title' => 'Posts',
+                'url' => route('admin.posts.index'),
+                'active' => request()->routeIs('admin.posts.*'),
                 'icon' => 'fa-solid fa-blog'    
+            ],
+            [
+                'title' => 'Categorias',
+                'url' => route('admin.categories.index'),
+                'active' => request()->routeIs('admin.categories.*'),
+                'icon' => 'fa-sharp fa-solid fa-circle-info' 
             ],
         ];
     @endphp
@@ -49,7 +55,7 @@
             @include('layouts.partials.admin.sidebar'){{-- aqui incluyo el sidebar que esta en sidebar.blade.php --}}
         </div>
 
-        <div class=" flex-1">
+        <div class=" w-full">
             @include('layouts.partials.admin.navigation'){{-- aqui incluyo el menu de navegacion que esta en navigation.blade.php --}}
 
 
