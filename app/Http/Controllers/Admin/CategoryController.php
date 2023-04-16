@@ -100,6 +100,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        session()->flash('flash.banner', 'La categoria se ha eliminado con exito');
+        session()->flash('flash.bannerStyle', 'success');
+
+        return redirect()->route('admin.categories.index');
     }
 }
