@@ -15,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('admin.categories.index');
+        $categories=Category::all();
+        return view('admin.categories.index', compact('categories'));
     }
 
     /**
@@ -36,7 +37,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        $category = Category::create($request->all());
+
+        session()->flash('flash.banner', 'La Categoria fue creada satisfactoriamente');
+        session()->flash('flash.bannerStyle', 'success');
+
+        return redirect()->route('admin.categories.edit', $category);   
     }
 
     /**
@@ -70,7 +80,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        $category->update($request->all());
+
+        session()->flash('flash.banner', 'La Categoria fue actualizada satisfactoriamente');
+        session()->flash('flash.bannerStyle', 'success');
+
+        return redirect()->route('admin.categories.edit', $category);
     }
 
     /**
