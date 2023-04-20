@@ -10,12 +10,10 @@ class WelcomeController extends Controller
 {
     public function __invoke()
     {
-
-
         $categories = Category::all();
-
+        
         $posts = Post::where('is_published', true)
-                ->orderBy('published_at', 'desc')
+                ->Filter(request()->all())//Enviamos todo lo que recuperamos por la url y esto es un array
                 ->orderBy('id', 'desc')
                 ->paginate(10);
 

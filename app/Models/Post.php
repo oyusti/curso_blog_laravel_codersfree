@@ -62,6 +62,34 @@ class Post extends Model
     public function tags(){
         return $this->belongsToMany(Tag::class);
     }
+
+    public function scopeFilter($query, $filters){//$filters tiene el array que traigo de la url
+        //Con When si el primer parametro me devuelve true entonces me ejecuta la funcion que le paso como segundo parametro
+        //Si category existe, entonces me ejecuta la funcion anonima(segundo parametro) que tiene como objetivo recuperarme
+        //los post que tengan la categoria que le estoy pasando por la url. 
+        //Como request('category') es un array entonces no puedo usar where
+        //en la consulta. Con whereIn le indicamos que busque el category_id dentro del array request('category')
+        $query->when($filters['category'] ?? null, function ($query, $category) {
+            $query->whereIn('category_id', $category);
+        })
+        //Si el request('order') existe entonces me ejecuta la funcion anonima que tiene como objetivo
+        //ordenar los post por fecha de publicacion. Si el request('order') es igual a new entonces
+        //me ordena de forma descendente, si no me ordena de forma ascendente
+        ->when($filters['order'] ?? 'new', function($query, $order){
+            $sort = $order == 'new' ? 'desc' : 'asc';
+            $query->orderBy('published_at',$sort);
+        })->when($filters['tag'] ?? null, function($query, $tag){//usamos "whereHas" porque queremos solo las etiquetas relacionadas con el post
+            $query->whereHas('tags', function($query) use ($tag){//usamos "use" porque $tag es una variable que esta fuera de la funcion anonima
+                $query->where('tags.name', $tag);//tags.name es el nombre de la tabla tags y $tag es el nombre del tag que le estoy pasando por la url y esta fuera de la funcion anonima
+            });
+        });
+        
+        // ->when($filters['search'] ?? null, function($query, $search){
+        //     $query->where('title', 'like', '%'.$search.'%')
+        //         ->orWhere('summary', 'like', '%'.$search.'%')
+        //         ->orWhere('content', 'like', '%'.$search.'%');
+        // });
+    }
     
     /* //Route Model Binding
         public function getRouteKeyName()

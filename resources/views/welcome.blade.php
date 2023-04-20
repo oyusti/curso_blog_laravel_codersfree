@@ -10,8 +10,9 @@
             Lista de Posts
         </h1>
 
+        {{-- Divido mi pantalla en cuatro partes, donde la segunda columna tomara el valor de tres partes y la primera el valor de una --}}
         <div class=" grid grid-cols-4">
-
+            {{-- En la primera columna colocare los filtros --}}
             <div class=" col-span-1">
 
                 <form action="">
@@ -22,7 +23,8 @@
                         <select name="order"
                             class=" border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
                             <option value="new">Más recientes</option>
-                            <option value="old" @selected(request('order')=='old')>Más antiguos</option>{{-- Si el valor order es igual a old, entonces me lo deja por defecto marcado --}}
+                            <option value="old" @selected(request('order') == 'old')>Más antiguos</option>
+                            {{-- Si el valor order es igual a old, entonces me lo deja por defecto marcado --}}
                         </select>
 
                     </div>
@@ -36,7 +38,9 @@
                                 <li>
                                     <label>
                                         {{-- Para dejar seleccionado los checbox pregunto primero si es un array y luego si el valor esta dentro del array --}}
-                                        <x-jet-checkbox name="category[]" value="{{ $category->id }}" :checked="is_array(request('category')) && in_array($category->id, request('category'))"/>
+                                        <x-jet-checkbox name="category[]" value="{{ $category->id }}"
+                                            :checked="is_array(request('category')) &&
+                                                in_array($category->id, request('category'))" />
                                         <span class=" ml-2 text-gray-700">{{ $category->name }}</span>
                                     </label>
                                 </li>
@@ -46,11 +50,12 @@
                     </div>
                     <x-jet-button>
                         Aplicar Filtros
-                    </x-jet-button>    
+                    </x-jet-button>
                 </form>
 
             </div>
 
+            {{-- En la segunda columna colocare los posts --}}
             <div class=" col-span-3">
                 <div class=" space-y-8">
 
@@ -68,10 +73,12 @@
                                 </h1>
                                 <div class=" mb-2">
                                     @foreach ($post->tags as $tag)
-                                        <span
-                                            class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                                            {{ $tag->name }}
-                                        </span>
+                                        <a href="{{route('home').'?tag='.$tag->name}}">
+                                            <span
+                                                class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                                                {{ $tag->name }}
+                                            </span>
+                                        </a>
                                     @endforeach
                                 </div>
                                 <p class=" text-sm mb-2">
@@ -94,7 +101,7 @@
         </div>
 
 
-
+        {{-- Coloco los links de paginacion --}}
         <div class=" mt-8">
             {{ $posts->links() }}
         </div>
