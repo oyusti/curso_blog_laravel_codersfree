@@ -20,9 +20,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts  =   Post::where('user_id', auth()->user()->id)
-                            ->orderBy('id', 'desc')
-                            ->paginate(10);//buscame todos los post del usuario que esta logueado
+        $posts  =   Post::  orderBy('id', 'desc')
+                            ->paginate(10);//buscame todos los post del usuario que esta logueado         
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -84,6 +83,13 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+
+
+
+        /* $post = Post::where('slug', $post)//buscame el post que tenga el slug que me llega por parametro
+                    ->where('user_id', auth()->user()->id)//buscame el post que tenga el user_id que me llega por parametro, es decir que le pertenezca a eseusuario logeado
+                    ->firstOrFail();
+ */
         $categories =   Category::all();        
         return view('admin.posts.edit', compact('post', 'categories'));
     }

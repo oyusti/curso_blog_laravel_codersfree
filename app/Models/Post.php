@@ -79,8 +79,8 @@ class Post extends Model
             $sort = $order == 'new' ? 'desc' : 'asc';
             $query->orderBy('published_at',$sort);
         })->when($filters['tag'] ?? null, function($query, $tag){//usamos "whereHas" porque queremos solo las etiquetas relacionadas con el post
-            $query->whereHas('tags', function($query) use ($tag){//usamos "use" porque $tag es una variable que esta fuera de la funcion anonima
-                $query->where('tags.name', $tag);//tags.name es el nombre de la tabla tags y $tag es el nombre del tag que le estoy pasando por la url y esta fuera de la funcion anonima
+            $query->whereHas('tags', function($query) use ($tag){//usamos "use" porque $tag es una variable que solo esta dentro de la funcion anonima
+                $query->where('tags.name', $tag);//tags.name es el nombre de la tabla tags y $tag es el nombre del tag que le estoy pasando por la url y solo esta dentro de la funcion anonima
             });
         });
         
@@ -96,5 +96,24 @@ class Post extends Model
         {
             return 'slug';
         } */
+
+    protected static function booted(){
+
+        //Cuando se crea un post, se le asigna el id del usuario que esta autenticado
+        //Con esto todos los posts solo pueden ser editados por el usuario que los creo
+        static::addGlobalScope('written', function($query){
+            if(request()->routeIs('admin.*')){//Solo se ejecuta cuando estamos en la ruta admin
+                $query->where('user_id', auth()->id());
+            }
+        });
+
+
+        static::addGlobalScope('published', function($query){
+            if(!request()->routeIs('admin.*')){//Solo se ejecuta cuando no estamos en la ruta admin
+                $query->where('is_published', true);
+            }
+        });
+
+    }    
    
 }
