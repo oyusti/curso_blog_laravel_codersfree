@@ -84,8 +84,6 @@ class PostController extends Controller
     public function edit(Post $post)
     {
 
-
-
         /* $post = Post::where('slug', $post)//buscame el post que tenga el slug que me llega por parametro
                     ->where('user_id', auth()->user()->id)//buscame el post que tenga el user_id que me llega por parametro, es decir que le pertenezca a eseusuario logeado
                     ->firstOrFail();
