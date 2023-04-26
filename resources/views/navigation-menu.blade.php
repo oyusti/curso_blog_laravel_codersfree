@@ -4,6 +4,11 @@
             'title'     =>  'Home',
             'url'       =>  route('home'),
             'active'    =>  request()->routeIs('home')   
+        ],
+        [
+            'title'     =>  'Contacto',
+            'url'       =>  route('contacts.index'),
+            'active'    =>  request()->routeIs('contacts.index')   
         ]
     ]
 @endphp

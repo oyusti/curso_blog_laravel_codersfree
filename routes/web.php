@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContacController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\WelcomeController;
 use App\Models\Post;
@@ -20,3 +21,7 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/', WelcomeController::class)->name('home');
 
 Route::get('posts/{post:slug}', [PostController::class, 'show'])->name('posts.show');
+
+Route::get('contacts',[ContacController::class, 'index'])->name('contacts.index');
+
+Route::post('contacts',[ContacController::class, 'store'])->name('contacts.store');
