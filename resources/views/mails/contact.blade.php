@@ -1,5 +1,7 @@
 @component('mail::message')
 # Hola! {{ $data['name'] }}
-
-{{ $data['message'] }}    
+@component('mail::panel')
+{{ $data['message'] }}   
+@endcomponent
+Correo de Contacto: {{ $data['email']}}
 @endcomponent

@@ -24,7 +24,11 @@ class ContacController extends Controller
         
         Mail::to('oscar@gmail.com')->send(new ContactMailable($request->all()));
 
-        return 'Mensaje enviado';
+        session()->flash('flash.banner', 'El Correo se ha enviado satisfactoriamente');//se utiliza para dar mensajes flash, aqui especifico el nombre del mensaje
+        session()->flash('flash.bannerStyle', 'success');//Aqui especifico si 'success' o 'danger'. puedo dar estos dos mensajes
+
+
+        return back();
         
     }
 

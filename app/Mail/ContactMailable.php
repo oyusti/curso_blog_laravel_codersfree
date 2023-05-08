@@ -11,7 +11,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
 
-class ContactMailable extends Mailable
+class ContactMailable extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
