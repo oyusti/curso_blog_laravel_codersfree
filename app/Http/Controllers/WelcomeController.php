@@ -12,7 +12,8 @@ class WelcomeController extends Controller
     {
         $categories = Category::all();
         
-        $posts = Post::Filter(request()->all())//Enviamos todo lo que recuperamos por la url y esto es un array
+        $posts = Post::Filter(request()->all())
+                ->where('is_published', true)//Enviamos todo lo que recuperamos por la url y esto es un array
                 ->orderBy('id', 'desc')
                 ->paginate(10);
 

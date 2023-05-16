@@ -7,7 +7,9 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate as FacadesGate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -21,7 +23,9 @@ class PostController extends Controller
     public function index()
     {
         $posts  =   Post::  orderBy('id', 'desc')
-                            ->paginate(10);//buscame todos los post del usuario que esta logueado         
+                            ->where('user_id', auth()->id()) 
+                            ->paginate(10);//buscame todos los post del usuario que esta logueado 
+                                   
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -87,7 +91,12 @@ class PostController extends Controller
         /* $post = Post::where('slug', $post)//buscame el post que tenga el slug que me llega por parametro
                     ->where('user_id', auth()->user()->id)//buscame el post que tenga el user_id que me llega por parametro, es decir que le pertenezca a eseusuario logeado
                     ->firstOrFail();
- */
+        */
+
+        if(!Gate::allows('author', $post)){
+            abort(403);
+        }
+
         $categories =   Category::all();        
         return view('admin.posts.edit', compact('post', 'categories'));
     }

@@ -4,7 +4,7 @@
 
         <div class=" bg-white p-8 rounded-lg shadow-lg">
 
-            <form action="" method="Post">
+            <form action="" method="Post" enctype="multipart/form-data">
                 @csrf
 
                 <x-jet-validation-errors class=" mb-4" />
@@ -37,6 +37,14 @@
 
                     <textarea name="message" class="w-full" 'border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm'" rows="6" placeholder="Escriba su Mensaje">{{old('message')}}</textarea>
 
+                </div>
+
+                <div>
+                    <x-jet-label>
+                        Archivo:
+                    </x-jet-label>
+
+                    <input type="file" name="file" id="file">
                 </div>
 
                 <div class=" flex justify-end">

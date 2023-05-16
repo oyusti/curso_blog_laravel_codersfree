@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Queue\SerializesModels;
 
 class ContactMailable extends Mailable implements ShouldQueue
@@ -58,10 +59,15 @@ class ContactMailable extends Mailable implements ShouldQueue
     /**
      * Get the attachments for the message.
      *
-     * @return array
+     * @return \Illuminate\Mail\Mailables\Attachment[]
      */
     public function attachments()
     {
-        return [];
+        if ($this->data['file']) {
+            return [
+                Attachment::fromStorage($this->data['file'])
+            ];
+        }
     }
+        
 }

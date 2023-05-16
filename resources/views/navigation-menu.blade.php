@@ -71,6 +71,13 @@
                                     {{ __('Profile') }}
                                 </x-jet-dropdown-link>
 
+                                @can('admin')
+                                <x-jet-dropdown-link href="{{ route('admin.dashboard') }}">
+                                    Admin
+                                </x-jet-dropdown-link>
+                                @endcan
+                                
+
 
                                 <div class="border-t border-gray-100"></div>
 
@@ -160,6 +167,10 @@
                     <!-- Account Management -->
                     <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
                         {{ __('Profile') }}
+                    </x-jet-responsive-nav-link>
+
+                    <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
+                        Admin
                     </x-jet-responsive-nav-link>
 
                     @if (Laravel\Jetstream\Jetstream::hasApiFeatures())

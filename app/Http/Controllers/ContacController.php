@@ -15,14 +15,17 @@ class ContacController extends Controller
     }
 
     public function store(Request $request){
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
             'message' => 'min:10|max:500'
         ]);
 
+            if ($request->hasFile('file')) {
+                $data['file'] = $request->file->store('contacts');
+            }
         
-        Mail::to('oscar@gmail.com')->send(new ContactMailable($request->all()));
+        Mail::to('oscar@gmail.com')->send(new ContactMailable($data));
 
         session()->flash('flash.banner', 'El Correo se ha enviado satisfactoriamente');//se utiliza para dar mensajes flash, aqui especifico el nombre del mensaje
         session()->flash('flash.bannerStyle', 'success');//Aqui especifico si 'success' o 'danger'. puedo dar estos dos mensajes
