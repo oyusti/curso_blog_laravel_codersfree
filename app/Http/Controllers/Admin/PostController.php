@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate as FacadesGate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
@@ -134,7 +135,12 @@ class PostController extends Controller
             //Para darle nombre a las imagenes utilizamos el mismo nombre del slug y lo concatenamos con la extension de la imagen
             $nameFile=Str::slug($request->slug) . '.' . $request->image->extension();
             //Luego subimos la imagen con "PutFileAs" que admite 3 parametros, la ruta, la imagen y el nombre del archivo
-            $image_url=Storage::disk('s3')->putFileAs('posts', $request->image, $nameFile, 'public');
+            $image_url=Storage::putFileAs('posts', $request->image, $nameFile, 'public');
+
+            $img=Image::make("/storage".$image_url);//creamos la imagen con la ruta de la imagen
+            $img->resize(1200, null, function($constraint){//redimensionamos la imagen
+                $constraint->aspectRatio();//mantenemos la proporcion
+            });
 
             //Con esto subimos las imagenes pero no le cambiamos el nombre, para eso usamos "putFileAs"
             //$image_url=Storage::put('posts', $request->file('image'));
