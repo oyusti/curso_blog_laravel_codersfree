@@ -26,9 +26,15 @@
                 class=" w-full aspect-[16/9] object-cover object-center">
         </figure>
 
-        <div class=" text-lg mt-4">
+        <div class=" text-lg mt-4 mb-16">
             {!! $post->content !!} {{-- Con esto le decimos que no lo tome como texto plano, sino que lo tome como html --}}
         </div>
+
+        <div>
+            @livewire('question', ['model' => $post])
+        </div>
+
+
 
 
         

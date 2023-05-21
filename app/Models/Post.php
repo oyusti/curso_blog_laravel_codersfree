@@ -58,6 +58,11 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+    //Relacion Uno a muchos Polimorfica
+    public function questions(){
+        return $this->morphMany(Question::class, 'questionable');
+    }
+
     //Relacion Muchos a Muchos
     public function tags(){
         return $this->belongsToMany(Tag::class);
