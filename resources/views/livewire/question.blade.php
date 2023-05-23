@@ -1,3 +1,3 @@
 <div>
-    dump($model);
+    @dump($model)
 </div>

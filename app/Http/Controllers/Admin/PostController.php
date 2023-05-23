@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdatePostRequest;
+use App\Jobs\Resizeimage;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate as FacadesGate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
+
 
 class PostController extends Controller
 {
@@ -118,8 +119,6 @@ class PostController extends Controller
             $tags[]=$tag->id;
         }
 
-        
-
         $post->tags()->sync($tags);
         $post->update($request->all());
 
@@ -137,10 +136,7 @@ class PostController extends Controller
             //Luego subimos la imagen con "PutFileAs" que admite 3 parametros, la ruta, la imagen y el nombre del archivo
             $image_url=Storage::putFileAs('posts', $request->image, $nameFile, 'public');
 
-            $img=Image::make("/storage".$image_url);//creamos la imagen con la ruta de la imagen
-            $img->resize(1200, null, function($constraint){//redimensionamos la imagen
-                $constraint->aspectRatio();//mantenemos la proporcion
-            });
+            
 
             //Con esto subimos las imagenes pero no le cambiamos el nombre, para eso usamos "putFileAs"
             //$image_url=Storage::put('posts', $request->file('image'));
@@ -159,6 +155,10 @@ class PostController extends Controller
             //Hasta ahora hemos subido la imagen a la carpeta pero no a la base de datos
             $post->image_url=$image_url;
             $post->save();
+
+            Resizeimage::dispatch($image_url);
+
+
             
         }
 
