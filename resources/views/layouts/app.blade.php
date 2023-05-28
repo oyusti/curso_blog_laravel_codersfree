@@ -10,6 +10,9 @@
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
 
+        {{-- Font Awesome --}}
+        <script src="https://kit.fontawesome.com/03221c46fa.js" crossorigin="anonymous"></script>{{-- aqui incluyo iconos de fontawesome --}}
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
