@@ -3,30 +3,31 @@
 namespace App\Http\Livewire;
 
 use App\Models\Question as ModelsQuestion;
+use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
 
 class Question extends Component
 {
 
+    //Propiedades
     public $model;
     public $message;
-    public $questions;
+    public $cant=10;
     public $question_edit=[
         'id' => null,
         'body' => ''
     ];
 
-    public function mount(){
-        $this->getQuestions();
+    //propiedad computada que se encarga de obtener los comentarios para listarlos
+    public function getQuestionsProperty(){
+        return $this->model
+        ->questions()
+        ->orderBy('created_at','desc')
+        ->take($this->cant)
+        ->get();
     }
-
-    public function getQuestions(){
-        $this->questions =  $this->model
-                ->questions()
-                ->orderBy('created_at','desc')
-                ->get();
-    }
-
+    
+    //Metodo que se encarga de crear un nuevo comentario
     public function store()
     {
 
@@ -39,9 +40,9 @@ class Question extends Component
             'user_id' => auth()->user()->id
         ]);
         $this->message = '';
-        $this->getQuestions();
     }
 
+    //Metodo que se encarga de editar un comentario
     public function edit($id)
     {
         $question = ModelsQuestion::find($id);
@@ -51,6 +52,7 @@ class Question extends Component
         ];
     }
 
+    //Metodo que se encarga de actualizar un comentario
     public function update(){
         $this->validate([
             'question_edit.body' => 'required'
@@ -60,20 +62,29 @@ class Question extends Component
         $question->update([
             'body' => $this->question_edit['body']
         ]);
-        $this->getQuestions();
         $this->reset('question_edit');
     }
 
+    //Metodo que se encarga de eliminar un comentario
     public function destroy($id)
     {
-        $question = $this->model->questions()->find($id);
+        $question = ModelsQuestion::find($id);
         $question->delete();
+
+        $this->reset('question_edit');
     }
 
+    //Metodo que se encarga de cancelar la edicion de un comentario
     public function cancel(){
         $this->reset('question_edit');
     }
 
+    //Metodo que se encarga de mostrar mas comentarios
+    public function show_more_questions(){
+        $this->cant = $this->cant + 10;
+    }
+
+    //Metodo que se encarga de renderizar la vista
     public function render()
     {
         return view('livewire.question');

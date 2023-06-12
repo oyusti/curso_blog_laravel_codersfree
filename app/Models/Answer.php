@@ -9,6 +9,11 @@ class Answer extends Model
 {
     use HasFactory;
 
+    protected $fillable=[
+        'body',
+        'user_id',
+    ];
+
     //Relacion Uno a Muchos Inversa
     public function user(){
         return $this->belongsTo(User::class);
