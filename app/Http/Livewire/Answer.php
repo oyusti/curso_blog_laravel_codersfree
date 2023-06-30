@@ -10,6 +10,8 @@ class Answer extends Component
 {
 
     public $question;
+    //public $answers;
+    public $open=false;
     
     public $answer_create = [
         'open' => false,
@@ -26,11 +28,23 @@ class Answer extends Component
         'body' => ''
     ];
 
+    //propiedad computada que se encarga de obtener las respuestas para listarlos
     public function getAnswersProperty(){
         return $this->question
         ->answers()
-        ->get();
+        ->when(!$this->open, function($query){
+            $query->take(0);
+        })->get();
+        
     }
+
+   /*  public function getAnswers(){
+        $this->answers = $this->question
+        ->answers()
+        ->take($this->cant_answers)
+        ->get();
+    } */
+
 
     public function store()
     {
@@ -93,6 +107,10 @@ class Answer extends Component
 
     public function cancel(){
         $this->reset('answer_edit');
+    }
+
+    public function show_answer(){
+        $this->open = !$this->open;
     }
 
     public function render()
