@@ -45,10 +45,11 @@
     @if ($question->answers()->count())
         <div class=" mt-2">
             <button class=" font-semibold text-blue-500" wire:click="show_answer">
-                @if ($this->open)
-                    Ocultar respuestas
-                @else
+
+                @if ($this->cant < $this->question->answers()->count())
                     Mostrar respuestas
+                @else
+                    Ocultar respuestas
                 @endif
                 
             </button>

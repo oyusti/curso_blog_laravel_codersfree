@@ -11,11 +11,13 @@
 
             <form wire:submit.prevent="store">
 
-                <textarea wire:model.defer="message" rows="3"
+                {{-- <textarea wire:model.defer="message" rows="3"
                     class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm w-full"
-                    placeholder="Escribe tu mensaje"></textarea>
+                    placeholder="Escribe tu mensaje"></textarea> --}}
 
-                <x-jet-input-error for="message" class=" mt-2" />
+                <x-balloon_editor wire:model="message" />
+
+                <x-jet-input-error for="message" class=" mt-4" />
 
                 <div class=" flex justify-end mt-2">
                     <button class=" bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
@@ -59,15 +61,18 @@
                         {{-- Si hemos puslsado el boton editar, muestrame el formulario de editar --}}
                         @if ($question->id == $question_edit['id'])
                             <form wire:submit.prevent="update">
-                                <textarea wire:model="question_edit.body" rows="3"
+                                {{-- <textarea wire:model="question_edit.body" rows="3"
                                     class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm w-full"
-                                    placeholder="Escribe tu mensaje"></textarea>
+                                    placeholder="Escribe tu mensaje"></textarea> --}}
 
-                                <x-jet-input-error for="question_edit.body"  class=" mt-1">
+                                <x-balloon_editor wire:model="question_edit.body" :focus="true"/>
+
+
+                                <x-jet-input-error for="question_edit.body" class=" mt-1">
 
                                 </x-jet-input-error>
 
-                                <div class=" flex justify-end">
+                                <div class=" flex justify-end mt-2">
                                     <x-jet-danger-button class=" mr-2" wire:click="cancel">
                                         Cancelar
                                     </x-jet-danger-button>
@@ -78,7 +83,7 @@
                             </form>
                         @else {{-- Sino muestrame el comentario del usuario --}}
                             <p>
-                                {{ $question->body }}
+                                {!!$question->body!!}{{-- Con el doble ! le estamos diciendo que considere las etiquetas <p> --}}
                             </p>
                         @endif
 
@@ -134,6 +139,19 @@
 
         </div>
     @endif
+    
+    @push('js')
+        <script src="https://cdn.ckeditor.com/ckeditor5/38.1.0/balloon/ckeditor.js"></script>
+       {{--  <script>
+            BalloonEditor
+                .create( document.querySelector( '#editor' ) )
+                .catch( error => {
+                    console.error( error );
+                } );
+        </script> --}}
+        
+    @endpush
+        
     
 
 </div>

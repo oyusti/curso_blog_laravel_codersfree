@@ -12,6 +12,8 @@ class Answer extends Component
     public $question;
     //public $answers;
     public $open=false;
+
+    public $cant=0;
     
     public $answer_create = [
         'open' => false,
@@ -31,11 +33,9 @@ class Answer extends Component
     //propiedad computada que se encarga de obtener las respuestas para listarlos
     public function getAnswersProperty(){
         return $this->question
-        ->answers()
-        ->when(!$this->open, function($query){
-            $query->take(0);
-        })->get();
-        
+                    ->answers()
+                    ->get()
+                    ->take($this->cant * (-1));
     }
 
    /*  public function getAnswers(){
@@ -57,9 +57,10 @@ class Answer extends Component
             'user_id' => auth()->user()->id
         ]);
 
+        $this->cant +=1;
+
         $this->reset('answer_create');
     }
-
 
     public function edit($answerId)
     {
@@ -110,7 +111,11 @@ class Answer extends Component
     }
 
     public function show_answer(){
-        $this->open = !$this->open;
+        if($this->cant < $this->question->answers()->count()){
+            $this->cant = $this->question->answers()->count();
+        }else{
+            $this->cant = 0;
+        }
     }
 
     public function render()
