@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Events\CommentCreated;
 use App\Models\Question as ModelsQuestion;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
@@ -35,11 +36,13 @@ class Question extends Component
             'message' => 'required'
         ]);
 
-        $this->model->questions()->create([
+        $question = $this->model->questions()->create([
             'body' => $this->message,
             'user_id' => auth()->user()->id
         ]);
         $this->message = '';
+
+        CommentCreated::dispatch($question);
     }
 
     //Metodo que se encarga de editar un comentario

@@ -18,13 +18,15 @@
             {{-- Agrego el textarea con sus botones de Cancelar y Editar --}}
             <form wire:submit.prevent="store()" class=" flex-1">
 
-                <textarea wire:model="answer_create.body" rows="3"
+                {{-- <textarea wire:model="answer_create.body" rows="3"
                     class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm w-full"
-                    placeholder="Escriba su respuesta"></textarea>
+                    placeholder="Escriba su respuesta"></textarea> --}}
+
+                <x-balloon_editor wire:model="answer_create.body" :focus="true" />
 
                 <x-jet-input-error for="answer_create.body" class=" mt-1"></x-jet-input-error>
 
-                <div class=" flex justify-end">
+                <div class=" flex justify-end mt-2">
 
                     <x-jet-danger-button class=" mr-2" wire:click="$set('answer_create.open', false)">
                         Cancelar
@@ -85,15 +87,17 @@
 
                         @if ($answer->id == $answer_edit['id'])
                             <form wire:submit.prevent="update">
-                                <textarea wire:model="answer_edit.body" rows="3"
+                                {{-- <textarea wire:model="answer_edit.body" rows="3"
                                     class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm w-full"
-                                    placeholder="Escribe tu mensaje"></textarea>
+                                    placeholder="Escribe tu mensaje"></textarea> --}}
+
+                                <x-balloon_editor wire:model="answer_edit.body" :focus="true" />    
 
                                 <x-jet-input-error for="answer_edit.body"  class=" mt-1">
 
                                 </x-jet-input-error>
 
-                                <div class=" flex justify-end">
+                                <div class=" flex justify-end mt-2">
                                     <x-jet-danger-button class=" mr-2" wire:click="cancel">
                                         Cancelar
                                     </x-jet-danger-button>
@@ -104,7 +108,7 @@
                             </form>
                         @else
                             <p>
-                                {{ $answer->body }}
+                                {!! $answer->body !!}
                             </p>
                         @endif
 
@@ -152,13 +156,15 @@
                         <div class=" flex-1 mt-4">
 
                             <form wire:submit.prevent="answer_to_answer_store">
-                                <textarea wire:model="answer_to_answer.body" rows="3"
+                                {{-- <textarea wire:model="answer_to_answer.body" rows="3"
                                     class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm w-full"
-                                    placeholder="Escribe tu mensaje"></textarea>
+                                    placeholder="Escribe tu mensaje"></textarea> --}}
+
+                                <x-balloon_editor wire:model="answer_to_answer.body" :focus="true" />
 
                                 <x-jet-input-error for="answer_edit.body"  class=" mt-1"></x-jet-input-error>
                            
-                                <div class=" flex justify-end">
+                                <div class=" flex justify-end mt-2">
                                     <x-jet-danger-button class=" mr-2" wire:click="$set('answer_to_answer.id', null)">
                                         Cancelar
                                     </x-jet-danger-button>
